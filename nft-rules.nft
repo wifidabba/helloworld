@@ -1,0 +1,82 @@
+define wifidabba_servers = {
+    3.7.125.144,
+    3.110.15.47,
+    43.204.243.143,
+    98.70.38.61,
+    98.70.91.158,
+    134.209.148.175
+}
+
+define dns_servers = {
+    1.1.1.1,
+    8.8.8.8
+}
+
+table ip nat {
+    set whitelist_ips {
+        type ipv4_addr
+    }
+
+    chain prerouting {
+        type nat hook prerouting priority dstnat; policy accept;
+        jump whitelist_nat
+        ip daddr $wifidabba_servers accept
+        iifname "enp174s0" udp dport 67 accept
+        iifname "enp174s0" jump redirected
+    }
+
+    chain postrouting {
+        type nat hook postrouting priority srcnat; policy accept;
+        jump whitelist_nat_post
+        masquerade
+    }
+
+    chain redirected {
+        dnat to 192.168.174.1
+    }
+
+    chain whitelist_nat {
+        ip saddr @whitelist_ips accept
+    }
+
+    chain whitelist_nat_post {
+        ip saddr @whitelist_ips masquerade
+    }
+}
+
+table ip filter {
+    set whitelist_ips {
+        type ipv4_addr
+    }
+
+    chain input {
+        type filter hook input priority filter; policy accept;
+    }
+
+    chain forward {
+        type filter hook forward priority filter; policy drop;
+        jump whitelist
+        iifname "eno1" accept
+        iifname "eth0" accept
+        ip saddr 192.168.174.0/24 ip daddr 192.168.174.1 accept
+        ip daddr $wifidabba_servers tcp dport { 80, 443 } accept
+        ip daddr $dns_servers accept
+        #oifname "enp174s0" accept
+    }
+
+    chain output {
+        type filter hook output priority filter; policy accept;
+    }
+
+    chain whitelist {
+        ip saddr @whitelist_ips accept
+        ip daddr @whitelist_ips accept
+    }
+}
+
+table ip nat_log {
+    chain log_postrouting {
+        type nat hook postrouting priority srcnat - 1; policy accept;
+        oifname "eno1" log prefix "NAT LOG: " flags all limit rate 10/second
+    }
+}

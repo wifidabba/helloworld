@@ -1,0 +1,41 @@
+server {
+    listen 80 default_server;
+    
+    root /var/www/html;
+    index index.php index.html;
+    
+    server_name _;
+
+    # Redirect all HTTP requests to captive portal
+    # This catches any other requests and redirects them
+    location / {
+        # Check if user is already authenticated (you can customize this logic)
+        # For now, redirect everything to index.php
+        try_files $uri $uri/ @captive;
+    }
+    
+    # Captive portal redirect
+    location @captive {
+        return 302 http://192.168.174.1/index.php?redirect=$request_uri;
+    }
+
+    # Handle PHP files
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        
+        # Verify the correct PHP-FPM socket path
+        # Common paths: /run/php/php8.1-fpm.sock, /run/php/php8.2-fpm.sock, etc.
+        fastcgi_pass unix:/run/php/php8.4-fpm.sock;
+        
+        # Security headers for PHP files
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    # Deny access to hidden files and directories
+    location ~ /\. {
+        deny all;
+        access_log off;
+        log_not_found off;
+    }
+}
