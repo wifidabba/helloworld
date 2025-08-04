@@ -4,7 +4,7 @@
 # $2 will contain the MAC address of the device
 # $3 will contain the IP address assigned to the device
 
-ENV_FILE="/home/wifidabba/b2b-router-consumer/.env"
+ENV_FILE="/home/wifidabba/env/.env"
 
 set -a
 . "$ENV_FILE"
