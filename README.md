@@ -114,7 +114,7 @@ sudo cp /home/wifidabba/helloworld/rc.local /etc/rc.local
 
 NFT Tables:
 
-Backup line isp nftables:
+CAUTION: Backup line isp nftables:
 
     ```
     sudo mkdir -p /etc/firewall_rules && sudo cp /home/wifidabba/helloworld/nftables/backup-connection/nft-rules.nft /etc/firewall_rules/nft-rules.nft
@@ -124,7 +124,7 @@ Backup line isp nftables:
     sudo cp /home/wifidabba/helloworld/nftables/backup-connection/dual-wan-monitor.sh /usr/local/bin/dual-wan-monitor.sh
     ```
 
-Single line isp nftables:
+CAUTION: Single line isp nftables:
 
     ```
     sudo mkdir -p /etc/firewall_rules && sudo cp /home/wifidabba/helloworld/nftables/single-connection/nft-rules.nft /etc/firewall_rules/nft-rules.nft
@@ -225,7 +225,15 @@ if $msg contains "NAT LOG" then {
 EOF
 ```
 
-6. Restart and make sure no logs are being written to the router.
+6. Other Commands
+
+Resolve Conf:
+
+```
+sudo cp /home/wifidabba/helloworld/resolv.conf /etc/resolv.conf
+```
+
+7. Restart and make sure no logs are being written to the router.
 
 ```sh
 sudo systemctl restart rsyslog && sudo reboot
@@ -235,12 +243,4 @@ Check the nat table
 
 ```sh
 sudo nft list table nat
-```
-
-#### Copy Commands
-
-Resolve Conf:
-
-```
-sudo cp /home/wifidabba/helloworld/resolv.conf /etc/resolv.conf
 ```
