@@ -66,9 +66,7 @@ WIREGUARD_URL="http://167.71.233.253:3000"
 ###### partner-kit project merged with b2b-router-consumer
 
 ```
-cd ~/b2b-router-consumer
-
-git pull origin develop && npm i && pm2 kill && npm run pm2:start && pm2 startup
+cd ~/b2b-router-consumer && git pull origin develop && npm i && pm2 kill && npm run pm2:start && pm2 startup
 
 
 #Copy and paste the startup script
@@ -117,11 +115,7 @@ NFT Tables:
 CAUTION: Backup line isp nftables:
 
     ```
-    sudo mkdir -p /etc/firewall_rules && sudo cp /home/wifidabba/helloworld/nftables/backup-connection/nft-rules.nft /etc/firewall_rules/nft-rules.nft
-
-    sudo cp /home/wifidabba/helloworld/nftables/backup-connection/nftables.conf /etc/nftables.conf
-
-    sudo cp /home/wifidabba/helloworld/nftables/backup-connection/dual-wan-monitor.sh /usr/local/bin/dual-wan-monitor.sh
+    sudo mkdir -p /etc/firewall_rules && sudo cp /home/wifidabba/helloworld/nftables/backup-connection/nft-rules.nft /etc/firewall_rules/nft-rules.nft && sudo cp /home/wifidabba/helloworld/nftables/backup-connection/nftables.conf /etc/nftables.conf && sudo cp /home/wifidabba/helloworld/nftables/backup-connection/dual-wan-monitor.sh /usr/local/bin/dual-wan-monitor.sh
     ```
 
 CAUTION: Single line isp nftables:
@@ -159,17 +153,13 @@ cd /home/wifidabba/b2b-router-consumer
 ##### Increase the ip range
 
 ```
-sudo nano /etc/systemd/network/25-lanbr.network
+sudo cp /home/wifidabba/helloworld/dnsmasq.conf /etc/dnsmasq.conf && sudo nano /etc/systemd/network/25-lanbr.network
 ```
 
 Replace:
 
 ```
 Address=192.168.174.1/19
-```
-
-```
-sudo cp /home/wifidabba/helloworld/dnsmasq.conf /etc/dnsmasq.conf
 ```
 
 ##### Bandwidth Accounting Scripts on BPI R3 routers - CL and HW
