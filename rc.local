@@ -1,4 +1,4 @@
 #!/bin/sh -e
 
-nft -f /etc/firewall_rules/nft-rules.nft
+sudo nft -f /etc/firewall_rules/nft-rules.nft
 exit 0
